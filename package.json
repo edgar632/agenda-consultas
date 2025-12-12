@@ -1,0 +1,25 @@
+{
+  "name": "clinica-escolar-agenda",
+  "version": "1.0.0",
+  "description": "Sistema de Agenda de Consultas para Clínica Escolar",
+  "main": "servidor.js",
+  "type": "module",
+  "scripts": {
+    "iniciar": "node servidor.js",
+    "dev": "node --watch servidor.js",
+    "teste": "node teste.js"
+  },
+  "keywords": ["clínica", "agenda", "consultas"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.6",
+    "body-parser": "^1.20.2",
+    "ejs": "^3.1.9",
+    "express-validator": "^7.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
