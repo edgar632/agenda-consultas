@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof titulo !== 'undefined' ? titulo : 'Clínica Escolar' %></title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        
+        <nav class="navegacao">
+            <ul class="menu">
+                <li><a href="/" class="link-menu">Início</a></li>
+                <li><a href="/pacientes" class="link-menu">Pacientes</a></li>
+                <li><a href="/profissionais" class="link-menu">Profissionais</a></li>
+                <li><a href="/consultas" class="link-menu">Consultas</a></li>
+            </ul>
+        </nav>
+
+        
+        <main class="conteudo-principal">
+            <% if (typeof mensagem !== 'undefined' && mensagem) { %>
+                <div class="alerta alerta-sucesso">
+                    <%= mensagem %>
+                </div>
+            <% } %>
+
+            <%- body %>
+        </main>
+
+        <footer class="rodape">
+            <p>Edgar Pereira</p>
+        </footer>
+    </div>
+</body>
+</html>

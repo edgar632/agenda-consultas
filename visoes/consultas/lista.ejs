@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultas - Clínica Escolar</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        
+
+
+        
+        <nav class="navegacao">
+            <ul class="menu">
+                <li><a href="/" class="link-menu">Início</a></li>
+                <li><a href="/pacientes" class="link-menu">Pacientes</a></li>
+                <li><a href="/profissionais" class="link-menu">Profissionais</a></li>
+                <li><a href="/consultas" class="link-menu">Consultas</a></li>
+            </ul>
+        </nav>
+
+        
+        <main class="conteudo-principal">
+            <h1>Consultas</h1>
+
+            <% if (typeof mensagem !== 'undefined' && mensagem) { %>
+                <div class="alerta alerta-sucesso">
+                    <%= mensagem %>
+                </div>
+            <% } %>
+
+            <div class="barra-busca">
+                <form method="GET" action="/consultas" style="display: flex; gap: 10px; width: 100%; flex-wrap: wrap;">
+                    <div class="campo-busca">
+                        <input type="text" name="busca" placeholder="Buscar por paciente ou profissional..." value="<%= busca %>">
+                    </div>
+                    <div class="filtro">
+                        <select name="status">
+                            <option value="">Todos os Status</option>
+                            <option value="agendada" <%= status === 'agendada' ? 'selected' : '' %>>Agendada</option>
+                            <option value="cancelada" <%= status === 'cancelada' ? 'selected' : '' %>>Cancelada</option>
+                            <option value="concluída" <%= status === 'concluída' ? 'selected' : '' %>>Concluída</option>
+                        </select>
+                    </div>
+                    <div class="filtro">
+                        <input type="date" name="data" value="<%= data %>">
+                    </div>
+                    <button type="submit" class="botao botao-primario">Filtrar</button>
+                </form>
+                <a href="/consultas/novo" class="botao botao-sucesso">+ Nova Consulta</a>
+            </div>
+
+            <% if (consultas && consultas.length > 0) { %>
+                <table class="tabela">
+                    <thead>
+                        <tr>
+                            <th>Paciente</th>
+                            <th>Profissional</th>
+                            <th>Especialidade</th>
+                            <th>Data/Hora</th>
+                            <th>Status</th>
+                            <th class="coluna-acoes">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% consultas.forEach(consulta => { %>
+                            <tr>
+                                <td><%= consulta.nomePaciente %></td>
+                                <td><%= consulta.nomeProfissional %></td>
+                                <td><%= consulta.especialidade %></td>
+                                <td><%= new Date(consulta.dataHora).toLocaleString('pt-BR') %></td>
+                                <td>
+                                    <span style="padding: 4px 8px; border-radius: 3px; font-size: 12px; font-weight: 500;
+                                        <%= consulta.status === 'agendada' ? 'background-color: #d1ecf1; color: #0c5460;' : 
+                                            consulta.status === 'cancelada' ? 'background-color: #f8d7da; color: #721c24;' : 
+                                            'background-color: #d4edda; color: #155724;' %>">
+                                        <%= consulta.status %>
+                                    </span>
+                                </td>
+                                <td class="coluna-acoes">
+                                    <div class="acoes">
+                                        <% if (consulta.status === 'agendada') { %>
+                                            <a href="/consultas/<%= consulta.id %>/editar" class="botao botao-primario botao-pequeno">Reagendar</a>
+                                            <form method="POST" action="/consultas/<%= consulta.id %>/concluir" style="display: inline;">
+                                                <button type="submit" class="botao botao-sucesso botao-pequeno">Concluir</button>
+                                            </form>
+                                            <button class="botao botao-perigo botao-pequeno" onclick="abrirCancelamento(<%= consulta.id %>)">Cancelar</button>
+                                        <% } else { %>
+                                            <span style="color: #999; font-size: 12px;">Sem ações</span>
+                                        <% } %>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <div class="lista-vazia">
+                    <p>Nenhuma consulta encontrada.</p>
+                    <a href="/consultas/novo" class="botao botao-sucesso">Agendar Primeira Consulta</a>
+                </div>
+            <% } %>
+        </main>
+
+        <
+        <footer class="rodape">
+            <p>Edgar Pereira</p>
+        </footer>
+    </div>
+
+    <div id="modalCancelamento" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 30px; border-radius: 4px; width: 90%; max-width: 400px;">
+            <h2>Cancelar Consulta</h2>
+            <p>Tem certeza que deseja cancelar esta consulta? Lembre-se que o cancelamento só é permitido com no mínimo 2 horas de antecedência.</p>
+            
+            <form id="formCancelamento" method="POST" style="margin-top: 20px;">
+                <div class="grupo-formulario">
+                    <label for="motivo">Motivo do Cancelamento (opcional)</label>
+                    <textarea id="motivo" name="motivo" placeholder="Descreva o motivo do cancelamento..."></textarea>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="botao botao-perigo">Confirmar Cancelamento</button>
+                    <button type="button" class="botao botao-secundario" onclick="fecharCancelamento()">Voltar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function abrirCancelamento(consultaId) {
+            const modal = document.getElementById('modalCancelamento');
+            const form = document.getElementById('formCancelamento');
+            form.action = '/consultas/' + consultaId + '/cancelar';
+            modal.style.display = 'block';
+        }
+
+        function fecharCancelamento() {
+            const modal = document.getElementById('modalCancelamento');
+            modal.style.display = 'none';
+        }
+
+        // Fechar modal ao clicar fora
+        document.getElementById('modalCancelamento').addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharCancelamento();
+            }
+        });
+    </script>
+</body>
+</html>

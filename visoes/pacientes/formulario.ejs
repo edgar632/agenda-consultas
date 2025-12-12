@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= paciente ? 'Editar Paciente' : 'Novo Paciente' %> - Clínica Escolar</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        
+
+
+        
+        <nav class="navegacao">
+            <ul class="menu">
+                <li><a href="/" class="link-menu">Início</a></li>
+                <li><a href="/pacientes" class="link-menu">Pacientes</a></li>
+                <li><a href="/profissionais" class="link-menu">Profissionais</a></li>
+                <li><a href="/consultas" class="link-menu">Consultas</a></li>
+            </ul>
+        </nav>
+
+        
+        <main class="conteudo-principal">
+            <h1><%= paciente ? 'Editar Paciente' : 'Novo Paciente' %></h1>
+
+            <% if (erros && erros.length > 0) { %>
+                <div class="erros-validacao">
+                    <strong>Erros encontrados:</strong>
+                    <ul>
+                        <% erros.forEach(erro => { %>
+                            <li><%= erro.msg %></li>
+                        <% }); %>
+                    </ul>
+                </div>
+            <% } %>
+
+            <form method="POST" action="<%= paciente ? '/pacientes/' + paciente.id : '/pacientes' %>" class="formulario">
+                <div class="grupo-formulario">
+                    <label for="nome">Nome *</label>
+                    <input type="text" id="nome" name="nome" value="<%= paciente ? paciente.nome : '' %>" required>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" value="<%= paciente ? paciente.email : '' %>" required>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="telefone">Telefone *</label>
+                    <input type="tel" id="telefone" name="telefone" value="<%= paciente ? paciente.telefone : '' %>" required>
+                </div>
+
+                <div class="botao-grupo">
+                    <button type="submit" class="botao botao-sucesso">
+                        <%= paciente ? 'Atualizar Paciente' : 'Cadastrar Paciente' %>
+                    </button>
+                    <a href="/pacientes" class="botao botao-secundario">Cancelar</a>
+                </div>
+            </form>
+        </main>
+
+        <
+        <footer class="rodape">
+            <p>Edgar Pereira</p>
+        </footer>
+    </div>
+</body>
+</html>

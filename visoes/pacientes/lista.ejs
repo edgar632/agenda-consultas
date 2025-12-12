@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes - Clínica Escolar</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        
+
+
+        
+        <nav class="navegacao">
+            <ul class="menu">
+                <li><a href="/" class="link-menu">Início</a></li>
+                <li><a href="/pacientes" class="link-menu">Pacientes</a></li>
+                <li><a href="/profissionais" class="link-menu">Profissionais</a></li>
+                <li><a href="/consultas" class="link-menu">Consultas</a></li>
+            </ul>
+        </nav>
+
+        
+        <main class="conteudo-principal">
+            <h1>Pacientes</h1>
+
+            <% if (typeof mensagem !== 'undefined' && mensagem) { %>
+                <div class="alerta alerta-sucesso">
+                    <%= mensagem %>
+                </div>
+            <% } %>
+
+            <div class="barra-busca">
+                <form method="GET" action="/pacientes" style="display: flex; gap: 10px; width: 100%;">
+                    <div class="campo-busca">
+                        <input type="text" name="busca" placeholder="Buscar por nome, email ou telefone..." value="<%= busca %>">
+                    </div>
+                    <button type="submit" class="botao botao-primario">Buscar</button>
+                </form>
+                <a href="/pacientes/novo" class="botao botao-sucesso">+ Novo Paciente</a>
+            </div>
+
+            <% if (pacientes && pacientes.length > 0) { %>
+                <table class="tabela">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Telefone</th>
+                            <th class="coluna-acoes">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% pacientes.forEach(paciente => { %>
+                            <tr>
+                                <td><%= paciente.nome %></td>
+                                <td><%= paciente.email %></td>
+                                <td><%= paciente.telefone %></td>
+                                <td class="coluna-acoes">
+                                    <div class="acoes">
+                                        <a href="/pacientes/<%= paciente.id %>/editar" class="botao botao-primario botao-pequeno">Editar</a>
+                                        <form method="POST" action="/pacientes/<%= paciente.id %>/deletar" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja deletar este paciente?');">
+                                            <button type="submit" class="botao botao-perigo botao-pequeno">Deletar</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <div class="lista-vazia">
+                    <p>Nenhum paciente encontrado.</p>
+                    <a href="/pacientes/novo" class="botao botao-sucesso">Cadastrar Primeiro Paciente</a>
+                </div>
+            <% } %>
+        </main>
+
+        <
+        <footer class="rodape">
+            <p>Edgar Pereira</p>
+        </footer>
+    </div>
+</body>
+</html>

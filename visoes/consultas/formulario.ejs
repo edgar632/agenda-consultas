@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= consulta ? 'Reagendar Consulta' : 'Agendar Consulta' %> - Clínica Escolar</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        
+
+
+        
+        <nav class="navegacao">
+            <ul class="menu">
+                <li><a href="/" class="link-menu">Início</a></li>
+                <li><a href="/pacientes" class="link-menu">Pacientes</a></li>
+                <li><a href="/profissionais" class="link-menu">Profissionais</a></li>
+                <li><a href="/consultas" class="link-menu">Consultas</a></li>
+            </ul>
+        </nav>
+
+        
+        <main class="conteudo-principal">
+            <h1><%= consulta ? 'Reagendar Consulta' : 'Agendar Consulta' %></h1>
+
+            <% if (erros && erros.length > 0) { %>
+                <div class="erros-validacao">
+                    <strong>Erros encontrados:</strong>
+                    <ul>
+                        <% erros.forEach(erro => { %>
+                            <li><%= erro.msg %></li>
+                        <% }); %>
+                    </ul>
+                </div>
+            <% } %>
+
+            <form method="POST" action="<%= consulta ? '/consultas/' + consulta.id : '/consultas' %>" class="formulario">
+                <div class="grupo-formulario">
+                    <label for="pacienteId">Paciente *</label>
+                    <select id="pacienteId" name="pacienteId" required>
+                        <option value="">Selecione um paciente</option>
+                        <% pacientes.forEach(paciente => { %>
+                            <option value="<%= paciente.id %>" <%= consulta && consulta.pacienteId === paciente.id ? 'selected' : '' %>>
+                                <%= paciente.nome %>
+                            </option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="profissionalId">Profissional *</label>
+                    <select id="profissionalId" name="profissionalId" required>
+                        <option value="">Selecione um profissional</option>
+                        <% profissionais.forEach(profissional => { %>
+                            <option value="<%= profissional.id %>" <%= consulta && consulta.profissionalId === profissional.id ? 'selected' : '' %>>
+                                <%= profissional.nome %> - <%= profissional.especialidade %>
+                            </option>
+                        <% }); %>
+                    </select>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="dataHora">Data e Hora *</label>
+                    <input type="datetime-local" id="dataHora" name="dataHora" 
+                        value="<%= consulta ? new Date(consulta.dataHora).toISOString().slice(0, 16) : '' %>" 
+                        required>
+                    <small style="color: #666; font-size: 12px; margin-top: 5px; display: block;">
+                        A data e hora devem ser no futuro. Horários com sobreposição serão rejeitados.
+                    </small>
+                </div>
+
+                <div class="botao-grupo">
+                    <button type="submit" class="botao botao-sucesso">
+                        <%= consulta ? 'Atualizar Consulta' : 'Agendar Consulta' %>
+                    </button>
+                    <a href="/consultas" class="botao botao-secundario">Cancelar</a>
+                </div>
+            </form>
+        </main>
+
+        <
+        <footer class="rodape">
+            <p>Edgar Pereira</p>
+        </footer>
+    </div>
+</body>
+</html>
