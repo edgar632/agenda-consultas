@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'visoes'));
+app.set('views', path.join(__dirname, 'views'));
 
 const bancoDados = new sqlite3.Database(path.join(__dirname, 'clinica.db'), (erro) => {
   if (erro) {

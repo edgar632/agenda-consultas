@@ -81,7 +81,7 @@ clinica_escolar_agenda/
 ├── README.md               
 ├── public/
 │   └── style.css          # Estilização CSS
-└── visoes/
+└── views/
     ├── index.ejs           # Página inicial
     ├── erro.ejs            # Página de erro
     ├── layout.ejs          # Layout base
