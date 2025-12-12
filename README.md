@@ -44,7 +44,7 @@ Atende às necessidades de uma clínica escolar no gerenciamento de:
 - Cancelamento requer 2 horas de antecedência
 - Status válido (agendada, cancelada, concluída)
 
-## Como Iniciar
+## Como instalar e iniciar
 
 ### Pré-requisitos
 
@@ -70,12 +70,6 @@ npm run iniciar
 
 O servidor estará disponível em `http://localhost:3000`
 
-### Modo Desenvolvimento
-
-Para desenvolvimento com auto-reload:
-```bash
-npm run dev
-```
 
 ## Estrutura do Projeto
 
